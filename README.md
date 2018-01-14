@@ -7,34 +7,34 @@ Anna was designed as a user management microservice meant for deployment in a mi
 
 ### Functional Goals
 
-❌ create an account
-❌ retrieve account information
-❌ upate account information
-❌ create one or more user profiles per account
-❌ update user profile
-❌ delete user profiles
-❌ delete an account and all profile related data
-❌ handle logins using token-based authentication
-❌ handle logouts using token-based authentication
-❌ report session status of a user for microservices
+❌ create an account  
+❌ retrieve account information  
+❌ upate account information  
+❌ create one or more user profiles per account  
+❌ update user profile  
+❌ delete user profiles  
+❌ delete an account and all profile related data  
+❌ handle logins using token-based authentication  
+❌ handle logouts using token-based authentication  
+❌ report session status of a user for microservices  
 
 ### Non-Functional Goals
 
-✅ Containerised deployment
-✅ Expose Prometheus metrics
-✅ Basic Auth protection for Prometheus metrics endpoint
-✅ Expose a health check endpoint for container orchestration systems
-✅ Expose a readiness check endpoint for container orchestration systems
-✅ Cross-Origin-Resource-Sharing (CORS) enabled
-✅ response compression
-✅ RESTful API
-❌ authentication via JSON web tokens
-❌ roles based access control
-❌ level-based logging
-❌ FluentD logs exporter
-❌ HTTP/2 communication between services
-❌ secure communication channel between services
-❌ GraphQL API
+✅ Containerised deployment  
+✅ Expose Prometheus metrics  
+✅ Basic Auth protection for Prometheus metrics endpoint  
+✅ Expose a health check endpoint for container orchestration systems  
+✅ Expose a readiness check endpoint for container orchestration systems  
+✅ Cross-Origin-Resource-Sharing (CORS) enabled  
+✅ response compression  
+✅ RESTful API  
+❌ authentication via JSON web tokens  
+❌ roles based access control  
+❌ level-based logging  
+❌ FluentD logs exporter  
+❌ HTTP/2 communication between services  
+❌ secure communication channel between services  
+❌ GraphQL API  
 
 ### Assumptions
 
