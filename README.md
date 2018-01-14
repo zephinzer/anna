@@ -2,6 +2,12 @@
 
 Opinionated plug-and-play accounts && authentication (ANNA) microservice for use in systems that require a user account system.
 
+- [Overview & Goals](#overview--goals)
+- [RESTful Endpoints](#restful-endpoints)
+- [Data Schema](#data-schema)
+- [Deployment Configuration](#deployment-configuration)
+- [Contributing](#contributing)
+
 ## Overview & Goals
 Anna was designed as a user management microservice meant for deployment in a microservice/service-oriented architecture. The over-arching goal is to be able to deploy Anna as a service and have other services refer to it as a central source of truth for user information.
 
@@ -46,15 +52,15 @@ Anna was designed as a user management microservice meant for deployment in a mi
 A user represents an atomic account and stores contact information and credentials.
 
 #### Profiles
-A profile represents the public information related to a user.
+A profile represents the public information related to a user. A profile belongs to a single user, but each user can have multiple profiles.
 
 #### Session
-A session represents the span of time a user spends between logging in and logging out
+A session represents the span of time a user spends between logging in and logging out. Each session belongs to a single user, but each user can have multiple sessions.
 
 #### Audit
-An audit represents changes to any of the afore-mentioned entities and provides a way for verifying user claims.
+An audit represents changes to any of the afore-mentioned entities and provides a way for verifying user claims. Audits are weakly linked (non-database integrity checked) to updates in user, profile and session information.
 
-## Endpoints
+## RESTful Endpoints
 
 ### GET `/user`
 Retrieves the profile for the current user as identified in the `X-AuthToken` header.
@@ -98,7 +104,7 @@ Logs a user in and returns an authentication token.
 ### DELETE `/session`
 Explicitly logs a user out.
 
-## Internals
+## Data Schema
 
 ### User Fields
 
@@ -147,6 +153,7 @@ Explicitly logs a user out.
 #### `gender` : *enum*
 
 Enumerates to one of:
+
 - male
 - female
 - trans_male
@@ -188,16 +195,16 @@ Enumerates to one of:
 
 #### `date_created` : *datetime*
 
-### Configuration
+## Deployment Configuration
 
-#### `ALLOWED_ORIGINS`
+### `ALLOWED_ORIGINS`
 When this is defined, Cross-Origin-Resource-Sharing (CORS) is activated. If the value is an empty string, all origins will be allowed, otherwise, CORS is activated for the specified domains delimited by a comma.
 
 When left undefined, Cross-Origin-Resource-Sharing is disabled.
 
 > Defaults to `undefined`.
 
-#### `BASIC_AUTH_USERS`
+### `BASIC_AUTH_USERS`
 When this is defined, basic auth will be applied to the following endpoints:
 
 - `/metrics`
@@ -212,79 +219,79 @@ The above will create two users, `user1` and `user2`, with their respective pass
 
 > Defaults to `undefined`.
 
-#### `DB_CLIENT`
+### `DB_CLIENT`
 Defines the client we should be connecting to the database with. This can be one of `mysql`, `mysql2`, `sqlite3`, `postgresql`.
 
 > Defaults to `"mysql2"`.
 
-#### `DB_CONNECTION_POOL_MAX`
+### `DB_CONNECTION_POOL_MAX`
 Defines the maximum number of connections we should maintain with the database.
 
 > Defaults to `10`.
 
-#### `DB_CONNECTION_POOL_MIN`
+### `DB_CONNECTION_POOL_MIN`
 Defines the minimum number of connections we should maintain with the database.
 
 > Defaults to `2`.
 
-#### `DB_CONNECTION_URL`
+### `DB_CONNECTION_URL`
 Defines a connection URL.
 
 > Defaults to an object defining the database host (`DB_HOST`), database port (`DB_PORT`), database schema (`DB_SCHEMA`), database user (`DB_USER`) and the password for the user (`DB_PASSWORD`).
 
-#### `DB_HOST`
+### `DB_HOST`
 Defines the database host we should be connecting to. This is ignored if `DB_CONNECTION_URL` is specified.
 
 > Defaults to `"localhost"`.
 
-#### `DB_MIGRATIONS_TABLE_NAME`
+### `DB_MIGRATIONS_TABLE_NAME`
 Defines the name for the database migration table we will be using.
 
 > Defaults to `"db_migrations_list"`.
 
-#### `DB_PASSWORD`
+### `DB_PASSWORD`
 Defines the password for the database user defined in the `DB_USER` environment variable. This is ignored if `DB_CONNECTION_URL` is specified.
 
 > Defaults to `"anna"`.
 
-#### `DB_PORT`
+### `DB_PORT`
 Defines the database port we should be connecting to. This is ignored if `DB_CONNECTION_URL` is specified.
 
 > Defaults to `3306`.
 
-#### `DB_SCHEMA`
+### `DB_SCHEMA`
 Defines the database schema we should be using. This is ignored if `DB_CONNECTION_URL` is specified.
 
 > Defaults to `"anna"`.
 
-#### `DB_USER`
+### `DB_USER`
 Defines the database user we should be using. This is ignored if `DB_CONNECTION_URL` is specified.
 
 > Defaults to `"anna"`.
 
-#### `HEALTH_CHECK_ENDPOINT`
+### `HEALTH_CHECK_ENDPOINT`
 Defines the endpoint for health checks to be done on.
 
 > Defaults to `/healthz`.
 
-#### `NODE_ENV`
+### `NODE_ENV`
 Defines the environment we are running in.
 
 Valid values are `"development"` or `"production"`. If it is neither, the server assumes `"development"`
 
 > Defaults to `"development"`.
 
-#### `PORT`
+### `PORT`
 Defines the port which the server should listen on.
 
 > Defaults to 4000.
 
-#### `READINESS_CHECK_ENDPOINT`
+### `READINESS_CHECK_ENDPOINT`
 Defines the endpoint for readiness checks to be done on.
 
 > Defaults to `/readyz`.
 
-#### `REALM`
+### `REALM`
 Specifies the realm for basic authentication.
 
 > Defaults to `"ANNA"`.
@@ -362,5 +369,7 @@ Before submitting a merge request, please confirm that the following are done:
   - patch version for bug fixes
   - minor version for backward-compatible changes
   - major version for backward-incompatible changes
+
+- - -
 
 Cheers!
