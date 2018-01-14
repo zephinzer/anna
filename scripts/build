@@ -1,0 +1,33 @@
+#!/bin/sh
+CURR_DIR=$(dirname $0);
+ENVIRONMENT=$1;
+
+START_TIME=$(date '+%s');
+
+if [ "${ENVIRONMENT}" = "production" ]; then
+  ENV="production";
+  DOCKERFILE_PATH="./provisioning/production.Dockerfile";
+  IMAGE_TAG="zephinzer/anna:latest";
+else
+  ENV="development";
+  DOCKERFILE_PATH="./provisioning/development.Dockerfile";
+  IMAGE_TAG="zephinzer/anna:latest-dev";
+fi;
+
+printf "anna build > Building Anna with the following configuration:\n";
+printf "anna build >   ENVIRONMENT: [${ENV}] (from \$ENVIRONMENT)\n";
+printf "anna build >   DOCKERFILE_PATH: [${DOCKERFILE_PATH}]\n";
+printf "anna build >   IMAGE_TAG: [${IMAGE_TAG}]\n";
+printf "\n";
+
+docker build \
+  --file "${DOCKERFILE_PATH}" \
+  --tag  "${IMAGE_TAG}" \
+  .;
+
+END_TIME=$(date '+%s');
+
+printf "\nanna build > done in ~$((${END_TIME}-${START_TIME}))s\n";
+printf "anna build > run the newly built image using:\n";
+printf "anna build >\n";
+printf "anna build >   docker run -p 4000:4000 --name anna_instance ${IMAGE_TAG};\n";

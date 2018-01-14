@@ -1,0 +1,57 @@
+version: "3"
+services:
+  application_development:
+    build:
+      context: ../
+      dockerfile: ./provisioning/development.Dockerfile
+    environment:
+      DB_HOST: database_development
+      DB_PORT: 3306
+      DB_SCHEMA: anna_development
+      DB_USER: anna_development
+      DB_PASSWORD: anna_development
+      NODE_ENV: development
+      PORT: 4000
+    entrypoint: [ "./scripts/entrypoint.sh" ]
+    expose:
+      - "4000"
+    ports:
+      - "4000:4000"
+    depends_on:
+      - database_development
+  database_development:
+    image: mysql:5.7.20
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: anna_development
+      MYSQL_USER: anna_development
+      MYSQL_PASSWORD: anna_development
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    volumes:
+      - "../data/db:/var/lib/mysql"
+  migrate_development:
+    build:
+      context: ../
+      dockerfile: ./provisioning/development.Dockerfile
+    environment:
+      DB_HOST: database_development
+      DB_PORT: 3306
+      DB_SCHEMA: anna_development
+      DB_USER: anna_development
+      DB_PASSWORD: anna_development
+    entrypoint: [ "./scripts/migrate.sh" ]
+  seed_development:
+    build:
+      context: ../
+      dockerfile: ./provisioning/development.Dockerfile
+    environment:
+      DB_HOST: database_development
+      DB_PORT: 3306
+      DB_SCHEMA: anna_development
+      DB_USER: anna_development
+      DB_PASSWORD: anna_development
+    entrypoint: [ "./scripts/seed.sh" ]

@@ -1,0 +1,11 @@
+--check-leaks
+--colors
+--exit
+--forbid-only
+--forbid-pending
+--full-trace
+--recursive
+--reporter spec
+--trace-deprecation
+--trace-warnings
+--ui bdd

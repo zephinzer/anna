@@ -1,0 +1,46 @@
+{
+  "name": "annams",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "./scripts/build",
+    "dev": "nodemon entrypoint.js",
+    "db-development": "docker-compose -f ./provisioning/development.docker-compose.yml up --build database_development migrate_development seed_development",
+    "db-production": "docker-compose -f ./provisioning/production.docker-compose.yml up --build database migrate seed",
+    "env-development": "docker-compose -f ./provisioning/development.docker-compose.yml up --build",
+    "env-production": "docker-compose -f ./provisioning/production.docker-compose.yml up --build",
+    "start": "node entrypoint.js",
+    "test": "./scripts/test",
+    "test-watch": "mocha --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
+    "lint": "eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "express-prom-bundle": "^3.2.1",
+    "helmet": "^3.9.0",
+    "http-auth": "^3.2.3",
+    "jsonwebtoken": "^8.1.0",
+    "knex": "^0.14.2",
+    "morgan": "^1.9.0",
+    "mysql2": "^1.5.1",
+    "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^4.0.0",
+    "eslint": "^4.15.0",
+    "eslint-config-google": "^0.9.1",
+    "istanbul": "1.1.0-alpha.1",
+    "mocha": "^4.1.0",
+    "nodemon": "^1.14.11",
+    "sinon": "^4.1.4",
+    "sinon-chai": "^2.14.0"
+  }
+}

@@ -1,0 +1,6 @@
+data
+node_modules
+provisioning
+scripts
+!scripts/*.sh
+.env
