@@ -45,7 +45,7 @@ describe('middleware/basic-auth', () => {
 
   describe('.options', () => {
     it('gets the correct configuration', () => {
-      expect(basicAuthMiddleware.options).to.have.keys(['realm']);
+      expect(basicAuthMiddleware.options).to.include.keys(['realm']);
       expect(basicAuthMiddleware.options.realm).to.eql(config.realm);
     });
   });
