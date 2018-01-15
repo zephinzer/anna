@@ -2,9 +2,6 @@ sudo: required
 language: node_js
 node_js:
   - "6"
-  - "7"
-  - "8"
-  - "9"
 services:
   - docker
 
@@ -33,7 +30,8 @@ jobs:
         - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
       after_script:
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
-        - ./cc-test-reporter upload-coverage coverage/coverage.raw.json --exit-code ${TRAVIS_TEST_RESULT}
+        - printf "TRAVIS_TEST_RESULT: ${TRAVIS_TEST_RESULT}\n"
+        - ./cc-test-reporter upload-coverage coverage/lcov.info --exit-code ${TRAVIS_TEST_RESULT}
     - stage: test
       script:
         - set -e
