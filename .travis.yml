@@ -33,7 +33,7 @@ jobs:
         - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
       after_script:
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
-        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+        - ./cc-test-reporter upload-coverage coverage/coverage.raw.json --exit-code ${TRAVIS_TEST_RESULT}
     - stage: test
       script:
         - set -e
