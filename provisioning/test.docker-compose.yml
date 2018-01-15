@@ -1,0 +1,12 @@
+version: "3"
+services:
+  mocha_test:
+    build:
+      context: ../
+      dockerfile: ./provisioning/development.Dockerfile
+    entrypoint: [ "npm", "run", "mocha" ]
+  es_lint:
+    build:
+      context: ../
+      dockerfile: ./provisioning/development.Dockerfile
+    entrypoint: [ "npm", "run", "eslint" ]

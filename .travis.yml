@@ -5,6 +5,8 @@ node_js:
   - "7"
   - "8"
   - "9"
+services:
+  - docker
 
 branches:
   only:
@@ -15,22 +17,30 @@ notifications:
     - dev@joeir.net
 
 stages:
-  - build
   - test
   - publish
 
 jobs:
   include:
-    - stage: build
+    - stage: test
       script:
-        - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
+        - set -e
+        - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
+    - stage: test
+      script:
+        - set -e
+        - docker-compose -f ./provisioning/test.docker-compose.yml run es_lint
     - stage: publish
       env:
         - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
       script:
+        - set -e
         - git checkout ${TRAVIS_BRANCH};
         - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
         - printf "${COMMIT_MESSAGE}"
+        - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
+        - 
+        - docker logout
         # - |
         #   if [[ $COMMIT_MESSAGE == *"[force build]"* ]]; then
         #     ${CURR_DIR}/../versioning/iterate minor -i -q;
