@@ -99,6 +99,7 @@ console.info('READINESS_CHECK_ENDPOINT:', READINESS_CHECK_ENDPOINT, `(set to: ${
 const realm = REALM || 'ANNA';
 console.info('REALM:', REALM, `(set to: ${realm})`);
 
+console.info(process.env);
 const test = _ ?
   (
     _.indexOf('mocha') !== -1 || npm_lifecycle_event.indexOf('mocha') !== -1
