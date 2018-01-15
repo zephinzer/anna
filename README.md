@@ -319,20 +319,20 @@ npm run build;
 We use ESLint to maintain code conventions and quality. To run the linter:
 
 ```bash
-npm run lint;
+npm run eslint;
 ```
 
 ### Testing
 We use Mocha framework, Chai assertion library and Sinon mocking library in tests. To run the tests:
 
 ```bash
-npm test;
+npm run mocha;
 ```
 
 To run it in development which adds file watching:
 
 ```bash
-npm run test-watch;
+npm run mocha-watch;
 ```
 
 ### Running in Development

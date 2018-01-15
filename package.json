@@ -12,9 +12,10 @@
     "env-production": "docker-compose -f ./provisioning/production.docker-compose.yml up --build",
     "start": "node entrypoint.js",
     "reset-db": "rm -rf ./data/db",
-    "test": "./scripts/test",
-    "test-watch": "mocha --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
-    "lint": "eslint .",
+    "test": "npm run mocha && npm run mocha",
+    "mocha": "./scripts/test.sh",
+    "mocha-watch": "mocha --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
+    "eslint": "eslint .",
     "version-bump": "./scripts/versioning/iterate -q"
   },
   "author": "",
