@@ -1,0 +1,3 @@
+[submodule "scripts/versioning"]
+	path = scripts/versioning
+	url = https://github.com/zephinzer/version-tagging-scripts.git

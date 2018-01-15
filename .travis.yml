@@ -1,0 +1,43 @@
+sudo: required
+language: node_js
+node_js:
+  - "6"
+  - "7"
+  - "8"
+  - "9"
+
+branches:
+  only:
+    - master
+
+notifications:
+  email:
+    - dev@joeir.net
+
+stages:
+  - build
+  - test
+  - publish
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
+    - stage: publish
+      env:
+        - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
+      script:
+        - git checkout ${TRAVIS_BRANCH};
+        - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
+        - printf "${COMMIT_MESSAGE}"
+        # - |
+        #   if [[ $COMMIT_MESSAGE == *"[force build]"* ]]; then
+        #     ${CURR_DIR}/../versioning/iterate minor -i -q;
+        #   else
+        #     ${CURR_DIR}/../versioning/iterate -i -q;
+        #   fi;
+        # - git push -q https://zephinzer:${GITHUB_TOKEN}@github.com/zephinzer/docker-image-alpine-node.git --tags;
+        # - git checkout -b release;
+        # - git rebase ${TRAVIS_BRANCH};
+        # - git push -q https://zephinzer:${GITHUB_TOKEN}@github.com/zephinzer/docker-image-alpine-node.git --tags;
