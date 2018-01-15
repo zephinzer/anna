@@ -25,7 +25,6 @@ const {
   READINESS_CHECK_ENDPOINT,
   REALM,
   npm_lifecycle_event, // eslint-disable-line camelcase
-  _,
 } = process.env;
 
 const allowedOrigins = (() => (
