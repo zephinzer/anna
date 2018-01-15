@@ -1,8 +1,29 @@
-const server = require('../server');
 const supertest = require('supertest');
 const config = require('../config');
 
 describe('server', () => {
+  let server = null;
+  let basicAuthUsers = null;
+
+  before(() => {
+    basicAuthUsers = config.basicAuthUsers;
+    config.basicAuthUsers = [
+      {
+        username: 'server_test_user1',
+        password: 'server_test_pass1',
+      },
+      {
+        username: 'server_test_user2',
+        password: 'server_test_pass2',
+      },
+    ];
+    server = require('../server');
+  });
+
+  after(() => {
+    config.basicAuthUsers = basicAuthUsers;
+  });
+
   describe('GET /metrics', () => {
     it('returns 401 unauthorized if no credentials are provided', () =>
       supertest(server)

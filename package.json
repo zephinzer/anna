@@ -12,7 +12,7 @@
     "env-production": "docker-compose -f ./provisioning/production.docker-compose.yml up --build",
     "start": "node entrypoint.js",
     "reset-db": "rm -rf ./data/db",
-    "test": "npm run mocha && npm run mocha",
+    "test": "npm run mocha && npm run eslint",
     "mocha": "./scripts/test.sh",
     "mocha-watch": "mocha --reporter spec --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
     "eslint": "eslint .",
