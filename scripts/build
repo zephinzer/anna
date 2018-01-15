@@ -3,21 +3,25 @@ CURR_DIR=$(dirname $0);
 ENVIRONMENT=$1;
 
 START_TIME=$(date '+%s');
+LATEST_TAG="$(${CURR_DIR}/versioning/get-latest -q)";
 
 if [ "${ENVIRONMENT}" = "production" ]; then
   ENV="production";
   DOCKERFILE_PATH="./provisioning/production.Dockerfile";
   IMAGE_TAG="zephinzer/anna:latest";
+  IMAGE_VERSION="zephinzer/anna:${LATEST_TAG}";
 else
   ENV="development";
   DOCKERFILE_PATH="./provisioning/development.Dockerfile";
   IMAGE_TAG="zephinzer/anna:latest-dev";
+  IMAGE_VERSION="zephinzer/anna:${LATEST_TAG}-dev";
 fi;
 
 printf "anna build > Building Anna with the following configuration:\n";
 printf "anna build >   ENVIRONMENT: [${ENV}] (from \$ENVIRONMENT)\n";
 printf "anna build >   DOCKERFILE_PATH: [${DOCKERFILE_PATH}]\n";
 printf "anna build >   IMAGE_TAG: [${IMAGE_TAG}]\n";
+printf "anna build >   IMAGE_VERSION: [${IMAGE_VERSION}]\n";
 printf "\n";
 
 docker build \

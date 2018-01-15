@@ -31,7 +31,7 @@ jobs:
       after_script:
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
         - printf "TRAVIS_TEST_RESULT: ${TRAVIS_TEST_RESULT}\n"
-        - ./cc-test-reporter upload-coverage coverage/lcov.info --exit-code ${TRAVIS_TEST_RESULT}
+        - ./cc-test-reporter after-build coverage/lcov.info --exit-code ${TRAVIS_TEST_RESULT}
     - stage: test
       script:
         - set -e
@@ -43,7 +43,7 @@ jobs:
         - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
         - printf "${COMMIT_MESSAGE}"
         - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
-        - 
+        - npm run build
         - docker logout
         # - |
         #   if [[ $COMMIT_MESSAGE == *"[force build]"* ]]; then
