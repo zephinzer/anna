@@ -63,6 +63,7 @@ function server() {
   _server.use((req, res) => {
     res.status(404).json('ok');
   });
+
   _server.use((err, req, res, next) => {
     if (config.env === 'development') {
       res.status(500).json(err);
