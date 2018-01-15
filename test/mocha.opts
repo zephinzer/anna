@@ -1,8 +1,6 @@
 --check-leaks
 --colors
 --exit
---forbid-only
---forbid-pending
 --full-trace
 --recursive
 --reporter spec
