@@ -41,7 +41,7 @@ function server() {
   // for parsing URL query parameters
   _server.use(bodyParserMiddleware.urlencoded);
   // for prometheus metrics
-  _server.use('/metrics', basicAuthMiddleware, prometheusMiddleware);
+  _server.use('/metrics', basicAuthMiddleware(), prometheusMiddleware);
 
   // application logic, see controllers for details
   _server.get('/session', todoController);
