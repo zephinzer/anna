@@ -26,13 +26,16 @@ exports.up = function(knex, Promise) {
         'others',
         'none',
       ]);
-      table.integer('age');
       table.date('birth_date');
+      table.string('emaill', 128);
       table.string('contact_email', 128);
       table.string('contact_number', 64);
       table.string('contact_url', 255);
       table.text('contact_address');
       table.text('others');
+      table.string('provider_id', 64);
+      table.string('provider_access_token', 255);
+      table.string('provider_access_secret', 255);
       table.timestamp('last_modified')
         .defaultTo(knex.fn.now());
       table.timestamp('date_created')

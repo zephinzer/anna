@@ -1,4 +1,8 @@
-# Anna
+# **Anna** Microservice
+
+[![Build Status](https://travis-ci.org/zephinzer/anna.svg?branch=master)](https://travis-ci.org/zephinzer/anna)
+
+
 
 Opinionated plug-and-play accounts && authentication (ANNA) microservice for use in systems that require a user account system.
 
@@ -108,7 +112,9 @@ Explicitly logs a user out.
 
 ### User Fields
 
-#### `id` : *string*
+#### `id` : *number*
+
+#### `uuid` : *string*
 
 #### `handle` : *string*
 
@@ -120,21 +126,19 @@ Explicitly logs a user out.
 
 #### `password` : *string*
 
-#### `primary_profile` : *string*
-
 #### `last_modified` : *datetime*
 
 #### `date_created` : *datetime*
 
 ### User-Profile Fields
 
-#### `user_id` : *string*
+#### `user_id` : *number*
 
-#### `profile_id` : *string*
+#### `profile_id` : *number*
 
 ### Profile Fields
 
-#### `id` : *string*
+#### `id` : *number*
 
 #### `name_full` : *string*
 
@@ -161,9 +165,9 @@ Enumerates to one of:
 - others
 - none
 
-#### `age` : *number*
-
 #### `birth_date` : *date*
+
+#### `email` : *string*
 
 #### `contact_email` : *string*
 
@@ -174,6 +178,12 @@ Enumerates to one of:
 #### `contact_address` : *text*
 
 #### `others` : *text*
+
+#### `provider_id` : *string*
+
+#### `provider_access_token` : *string*
+
+#### `provider_access_secret` : *string*
 
 #### `last_modified` : *datetime*
 

@@ -17,11 +17,6 @@ exports.up = function(knex, Promise) {
       table.string('secondary_email', 128);
       table.string('phone_number', 64);
       table.string('password', 255);
-      table.string('name_full', 255);
-      table.string('name_first', 64);
-      table.string('name_middle', 64);
-      table.string('name_last', 64);
-      table.string('name_display', 128);
       table.timestamp('last_modified')
         .defaultTo(knex.fn.now());
       table.timestamp('date_created')
