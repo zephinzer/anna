@@ -31,8 +31,6 @@ jobs:
         - set -e
         - docker-compose -f ./provisioning/test.docker-compose.yml run es_lint
     - stage: publish
-      env:
-        - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
       script:
         - set -e
         - git checkout ${TRAVIS_BRANCH};
