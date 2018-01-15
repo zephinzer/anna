@@ -3,7 +3,6 @@
 --exit
 --full-trace
 --recursive
---reporter spec
 --trace-deprecation
 --trace-warnings
 --ui bdd

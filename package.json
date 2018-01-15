@@ -14,7 +14,7 @@
     "reset-db": "rm -rf ./data/db",
     "test": "npm run mocha && npm run mocha",
     "mocha": "./scripts/test.sh",
-    "mocha-watch": "mocha --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
+    "mocha-watch": "mocha --reporter spec --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
     "eslint": "eslint .",
     "version-bump": "./scripts/versioning/iterate -q"
   },
@@ -45,6 +45,7 @@
     "mocha": "^4.1.0",
     "nodemon": "^1.14.11",
     "sinon": "^4.1.4",
-    "sinon-chai": "^2.14.0"
+    "sinon-chai": "^2.14.0",
+    "supertest": "^3.0.0"
   }
 }
