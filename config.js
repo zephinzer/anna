@@ -24,6 +24,7 @@ const {
   PORT,
   READINESS_CHECK_ENDPOINT,
   REALM,
+  npm_lifecycle_event, // eslint-disable-line camel_case
   _,
 } = process.env;
 
@@ -98,7 +99,10 @@ console.info('READINESS_CHECK_ENDPOINT:', READINESS_CHECK_ENDPOINT, `(set to: ${
 const realm = REALM || 'ANNA';
 console.info('REALM:', REALM, `(set to: ${realm})`);
 
-const test = _ ? _.indexOf('mocha') !== -1 : false;
+const test = _ ?
+  (
+    _.indexOf('mocha') !== -1 || npm_lifecycle_event.indexOf('mocha') !== -1
+  ) : false;
 console.info('TEST:', `(set to: ${test})`);
 
 module.exports = {
