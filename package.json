@@ -1,6 +1,6 @@
 {
-  "name": "annams",
-  "version": "1.0.0",
+  "name": "anna-microservice",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,9 +11,11 @@
     "env-development": "docker-compose -f ./provisioning/development.docker-compose.yml up --build",
     "env-production": "docker-compose -f ./provisioning/production.docker-compose.yml up --build",
     "start": "node entrypoint.js",
+    "reset-db": "rm -rf ./data/db",
     "test": "./scripts/test",
     "test-watch": "mocha --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "version-bump": "./scripts/versioning/iterate -q"
   },
   "author": "",
   "license": "ISC",
