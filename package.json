@@ -19,7 +19,7 @@
     "version-bump": "./scripts/versioning/iterate -q"
   },
   "author": "",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "dependencies": {
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
