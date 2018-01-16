@@ -304,14 +304,7 @@ Specifies the realm for basic authentication.
 
 > Defaults to `"ANNA"`.
 
-## Contributing
-
-### Building
-To build Anna for release/deployment, run:
-
-```bash
-npm run build;
-```
+## Notes On Contributing
 
 ### Linting
 We use ESLint to maintain code conventions and quality. To run the linter:
@@ -320,22 +313,31 @@ We use ESLint to maintain code conventions and quality. To run the linter:
 npm run eslint;
 ```
 
-### Testing
-We use Mocha framework, Chai assertion library and Sinon mocking library in tests. To run the tests:
+See the [Travis CI script](./.travis.yml) for more info.
+
+### Functional Testing
+Two types of tests are present in our tests. The first is unit tests which are most of tests you will see. The second is systems tests which simulates execution of the server and running queries against it - this is found in the `server.test.js`.
+
+We use `mocha`, `chai`, `sinon` and `supertest` to validate functional behaviour of the service.
+
+To run the tests:
 
 ```bash
 npm run mocha;
 ```
 
-To run it in development which adds file watching:
+To run it in development which adds watching and allows for `.only` and `xit` keywords:
 
 ```bash
 npm run mocha-watch;
 ```
 
-### Running in Development
+See the [Travis CI script](./.travis.yml) for more info.
+
+### Running Locally
 During development, we try to keep the feedback loop short, so we avoid running Anna in a Docker container.
 
+#### Database In Development
 Run the database alone using:
 
 ```bash
@@ -350,34 +352,51 @@ npm run db-development -- -d
 
 The above command starts the database and builds the development image so that we can do a database migration and seed. If the database migration/seed files are changed, you will have to run the above command again to get the correct version of your database schema.
 
-You can now run Anna locally for development using Nodemon for live-reload of the application:
+#### Running Application In Development
+In development, we can use a live-reload tool such as `nodemon` which watches for file changes and reloads the application when any changes are detected. This allows us to write code, save it and have our server reflect the newly acquired behaviour. To activate this, use:
 
 ```bash
 npm run dev
 ```
 
-#### How it works
-We use the `dotenv` NPM package when the environment is set to `development`. This allows us to change environemnt variables on the fly without bothering about the build process. When running in `production`, the `./.env` is ignored and the environment variables provisioned for by the container orchestrator will be used instead.
+#### Configuring During Development
+The file `./.env` contains configurations that assume a database is running on the local computer. This database can be either a local MySQL instance, or you can spin it up using `docker-compose` using `npm run db-development` as shown above.
 
-The database is accessible via `localhost:3306` because of the `docker-compose.yml` file which forwards the port `3306` from within the Docker network to your host computer. Hence you will find inside the `./.env` file that we are using `localhost`. If you have your own MySQL server running, then that works too as long as there is no database named `anna_development`.
+### Building
+To create a development build, run:
 
-We also use `nodemon` to allow for quick reloads of the application. On any `*.js` file change, the application will reload.
+```bash
+npm run build -- development
+```
 
-### Flow
+To create a production build, run:
+
+```bash
+npm run build -- production
+```
+
+Building has no real use, we only use it in the Travis pipeline to push to DockerHub.
+
+### Contribution Flow
+
+#### Raise Issue
+[Start an issue](https://github.com/zephinzer/anna/issues) so that everyone knows what you're working on. It'll suck if someone was doing the same thing you did and only one person's code will be merged in.
+
+#### Fork & Build
+Fork this repository and make your changes in your `master` branch. After making your changes:
+
+1. **Update the `README.md`** for the changes you have made
+2. **Add yourself as a contributor** to the `package.json` file (yay)
+3. **Write/rewrite the tests for components you've changed** - think of the tests as functional specifications so that if someone needs to see how something is used, they can refer to the tests.
+4. **Add an appropriate version bump** - use `[major version bump]` for a major version bump and `[minor version bump]` for a minor one according to the [SEMVER](https://semver.org/) specification. Patch versions are automatically bumped if none of those tags are available.
 
 #### Merge Request
-Feel free to raise an issue (so there's visibility on what is being worked on), fork this repo, make the changes and submit merge requests tagging your issue. On passing of the Travis pipeline, I will merge your changes in.
-
-#### Contribution Checklist
-Before submitting a merge request, please confirm that the following are done:
-
-- tests are passing on your local machine
-- readme is updated describing your changes
-- appropriate version bump
-  - patch version for bug fixes
-  - minor version for backward-compatible changes
-  - major version for backward-incompatible changes
+Done making changes? Submit a Pull Request and let the Travis CI pipeline pass. On passing, your code will be reviewed using the Code Climate statistics as well as a human check to ensure leaness and maintainability.
 
 - - -
 
-Cheers!
+# Cheers!
+
+For reading till the end, here's a potato.
+
+![potato](https://cdn.shopify.com/s/files/1/1017/2183/t/2/assets/live-preview-potato.png?4839514862613583315)

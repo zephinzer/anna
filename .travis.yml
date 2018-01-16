@@ -26,21 +26,20 @@ jobs:
         - ./cc-test-reporter before-build
       script:
         - set -e
-        - docker-compose -f ./provisioning/test.docker-compose.yml build mocha_test
-        - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
+        - npm run mocha
+      after_script:
         - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
     - stage: test
       script:
         - set -e
-        - docker-compose -f ./provisioning/test.docker-compose.yml build es_lint
-        - docker-compose -f ./provisioning/test.docker-compose.yml run es_lint
+        - npm run eslint
     - stage: publish
       script:
         - set -e
         - git checkout ${TRAVIS_BRANCH};
         - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
         - |
-          if [[ $COMMIT_MESSAGE == *"[minor version bump]"* ]]; then
+          if [[ $COMMIT_MESSAGE == *"[major version bump]"* ]]; then
             ${CURR_DIR}/../versioning/iterate major -i -q;
           elif [[ $COMMIT_MESSAGE == *"[minor version bump]"* ]]; then
             ${CURR_DIR}/../versioning/iterate minor -i -q;
@@ -61,13 +60,3 @@ jobs:
         - docker tag ${TAG_LATEST} ${TAG_VERSION}
         - docker push ${TAG_VERSION}
         - docker logout
-        # - |
-        #   if [[ $COMMIT_MESSAGE == *"[force build]"* ]]; then
-        #     ${CURR_DIR}/../versioning/iterate minor -i -q;
-        #   else
-        #     ${CURR_DIR}/../versioning/iterate -i -q;
-        #   fi;
-        # - git push -q https://zephinzer:${GITHUB_TOKEN}@github.com/zephinzer/docker-image-alpine-node.git --tags;
-        # - git checkout -b release;
-        # - git rebase ${TRAVIS_BRANCH};
-        # - git push -q https://zephinzer:${GITHUB_TOKEN}@github.com/zephinzer/docker-image-alpine-node.git --tags;
