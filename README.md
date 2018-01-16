@@ -62,6 +62,32 @@ A session represents the span of time a user spends between logging in and loggi
 #### Audit
 An audit represents changes to any of the afore-mentioned entities and provides a way for verifying user claims. Audits are weakly linked (non-database integrity checked) to updates in user, profile and session information.
 
+## Support Endpoints
+
+### GET `/metrics`
+> Basic Auth protected
+Exposes the Prometheus metrics.
+
+### GET `/healthz`
+> This endpoint can be [configured using an environment variable](#health_check_endpoint) for customisation purposes
+
+Exposes a health-check for container orchestration systems to call.
+
+Returns `HTTP 200` with a JSON response body of `"ok"` when all is good.
+
+### GET `/readyz`
+> This endpoint can be [configured using an environment variable](#readiness_check_endpoint) for customisation purposes
+
+Exposes a readiness-check for container orchestration systems to call. We currently check for:
+
+- database configuration error
+- database client specification error
+- database connection error
+
+Returns `HTTP 200` with a JSON response body of `"ok"` when all is good.
+
+Returns `HTTP 500` with a JSON response body of all errors when something is wrong.
+
 ## RESTful Endpoints
 
 ### GET `/user`
