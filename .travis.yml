@@ -30,7 +30,7 @@ jobs:
         - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
       after_script:
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
-        - printf "TRAVIS_TEST_RESULT: ${TRAVIS_TEST_RESULT}\n"
+        - 'printf "TRAVIS_TEST_RESULT: ${TRAVIS_TEST_RESULT}\n"'
         - ./cc-test-reporter after-build coverage/lcov.info --exit-code ${TRAVIS_TEST_RESULT}
     - stage: test
       script:
