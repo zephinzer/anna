@@ -27,7 +27,8 @@ jobs:
         - ./cc-test-reporter before-build
       script:
         - set -e
-        - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
+        - npm run mocha
+        # - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
       after_script:
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
         - ./cc-test-reporter after-build --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
