@@ -21,10 +21,10 @@ jobs:
   include:
     - stage: test
       script:
+        - set -e
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
-        - set -e
         - ./cc-test-reporter before-build
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
         - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test

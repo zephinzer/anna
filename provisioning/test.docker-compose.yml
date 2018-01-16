@@ -5,6 +5,8 @@ services:
       context: ../
       dockerfile: ./provisioning/development.Dockerfile
     entrypoint: [ "npm", "run", "mocha" ]
+    volumes:
+      - '../coverage:/app/coverage'
   es_lint:
     build:
       context: ../
