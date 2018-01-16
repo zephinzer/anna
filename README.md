@@ -1,10 +1,6 @@
 # **Anna** Microservice
 
-[![Build Status](https://travis-ci.org/zephinzer/anna.svg?branch=master)](https://travis-ci.org/zephinzer/anna)
-
-[![Maintainability](https://api.codeclimate.com/v1/badges/888a37dfeefee615573d/maintainability)](https://codeclimate.com/github/zephinzer/anna/maintainability)
-
-[![Test Coverage](https://api.codeclimate.com/v1/badges/888a37dfeefee615573d/test_coverage)](https://codeclimate.com/github/zephinzer/anna/test_coverage)
+[![Build Status](https://travis-ci.org/zephinzer/anna.svg?branch=master)](https://travis-ci.org/zephinzer/anna) [![Maintainability](https://api.codeclimate.com/v1/badges/888a37dfeefee615573d/maintainability)](https://codeclimate.com/github/zephinzer/anna/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/888a37dfeefee615573d/test_coverage)](https://codeclimate.com/github/zephinzer/anna/test_coverage)
 
 Opinionated plug-and-play accounts && authentication (ANNA) microservice for use in systems that require a user account system.
 

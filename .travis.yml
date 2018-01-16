@@ -27,22 +27,41 @@ jobs:
         - ./cc-test-reporter before-build
       script:
         - set -e
-        - npm run mocha
-        # - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
+        - docker-compose -f ./provisioning/test.docker-compose.yml build mocha_test
+        - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
       after_script:
         - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
     - stage: test
       script:
         - set -e
+        - docker-compose -f ./provisioning/test.docker-compose.yml build es_lint
         - docker-compose -f ./provisioning/test.docker-compose.yml run es_lint
     - stage: publish
       script:
         - set -e
         - git checkout ${TRAVIS_BRANCH};
         - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
-        - printf "${COMMIT_MESSAGE}"
+        - |
+          if [[ $COMMIT_MESSAGE == *"[minor version bump]"* ]]; then
+            ${CURR_DIR}/../versioning/iterate major -i -q;
+          elif [[ $COMMIT_MESSAGE == *"[minor version bump]"* ]]; then
+            ${CURR_DIR}/../versioning/iterate minor -i -q;
+          else
+            ${CURR_DIR}/../versioning/iterate -i -q;
+          fi;
+        - git push -q https://zephinzer:${GH_TOKEN}@github.com/zephinzer/anna.git --tags;
         - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
-        - npm run build
+        - CURRENT_VERSION=$(./scripts/versioning/get-latest -q)
+        - TAG_LATEST="zephinzer/anna:latest"
+        - TAG_VERSION="zephinzer/anna:${CURRENT_VERSION}"
+        - npm run build -- development
+        - docker push ${TAG_LATEST}-dev
+        - docker tag ${TAG_LATEST}-dev ${TAG_VERSION}-dev
+        - docker push ${TAG_VERSION}-dev
+        - npm run build -- production
+        - docker push ${TAG_LATEST}
+        - docker tag ${TAG_LATEST} ${TAG_VERSION}
+        - docker push ${TAG_VERSION}
         - docker logout
         # - |
         #   if [[ $COMMIT_MESSAGE == *"[force build]"* ]]; then
