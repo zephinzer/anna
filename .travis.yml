@@ -20,18 +20,15 @@ stages:
 jobs:
   include:
     - stage: test
-      before_script:
+      script:
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
-        - ./cc-test-reporter before-build
-      script:
         - set -e
-        - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
-      after_script:
+        - ./cc-test-reporter before-build
         - CC_TEST_REPORTER_ID="${CC_TOKEN}"
-        - 'printf "TRAVIS_TEST_RESULT: ${TRAVIS_TEST_RESULT}\n"'
-        - ./cc-test-reporter after-build coverage/lcov.info --exit-code ${TRAVIS_TEST_RESULT}
+        - docker-compose -f ./provisioning/test.docker-compose.yml run mocha_test
+        - ./cc-test-reporter after-build --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
     - stage: test
       script:
         - set -e
