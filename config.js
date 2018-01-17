@@ -103,7 +103,7 @@ const realm = REALM || 'ANNA';
 console.info('REALM:', REALM, `(set to: ${realm})`);
 
 const test = (npm_lifecycle_event) ? // eslint-disable-line camelcase
-  (npm_lifecycle_event === 'mocha') : false; // eslint-disable-line camelcase
+  (npm_lifecycle_event.indexOf('mocha') !== -1) : false; // eslint-disable-line camelcase,max-len
 console.info('TEST:', `(set to: ${test})`);
 
 module.exports = {
