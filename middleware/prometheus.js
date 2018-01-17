@@ -24,6 +24,17 @@ function prometheusMiddleware() {
   }).metricsMiddleware;
 };
 
+prometheusMiddleware.registerCpuCount = () => {
+  const cpuCount = new Prometheus.Gauge({
+    name: 'node_cpu_count',
+    help: 'Number of CPUs',
+  });
+  (function cpuCountReporting() {
+    cpuCount.set(osUtils.cpuCount());
+    setTimeout(cpuCountReporting, ONE_MINUTE * 30);
+  })();
+};
+
 prometheusMiddleware.registerCpuUsage = () => {
   const cpuUsage = new Prometheus.Gauge({
     name: 'node_cpu_usage',
@@ -34,17 +45,6 @@ prometheusMiddleware.registerCpuUsage = () => {
       cpuUsage.set(value);
       setTimeout(cpuUsageReporting, ONE_SECOND * 2);
     });
-  })();
-};
-
-prometheusMiddleware.registerCpuCount = () => {
-  const cpuCount = new Prometheus.Gauge({
-    name: 'node_cpu_count',
-    help: 'Number of CPUs',
-  });
-  (function cpuCountReporting() {
-    cpuCount.set(osUtils.cpuCount());
-    setTimeout(cpuCountReporting, ONE_MINUTE * 30);
   })();
 };
 
@@ -64,9 +64,9 @@ prometheusMiddleware.registerLoadAverage = () => {
     }),
   };
   (function loadAvgReporting() {
-    loadAvg.one = osUtils.loadavg(1);
-    loadAvg.five = osUtils.loadavg(5);
-    loadAvg.fifteen = osUtils.loadavg(15);
+    loadAvg.one.set(osUtils.loadavg(1));
+    loadAvg.five.set(osUtils.loadavg(5));
+    loadAvg.fifteen.set(osUtils.loadavg(15));
     setTimeout(loadAvgReporting, ONE_MINUTE);
   })();
 };

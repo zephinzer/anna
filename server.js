@@ -25,23 +25,22 @@ function server() {
   const basicAuthMiddleware = require('./middleware/basic-auth');
   const _server = express();
 
-  // for server info stripping
-  _server.use(helmetMiddleware);
   // for logging all requests
-  _server.use(morganMiddleware);
+  _server.use(morganMiddleware());
+  // for server info stripping
+  _server.use(helmetMiddleware());
   // for container orchestrators to check on service status
   _server.get(config.healthCheckEndpoint, healthCheckController);
   _server.get(config.readinessCheckEndpoint, readinessCheckController);
   // for handling cross origin resource sharing
-  _server.use(corsMiddleware);
+  _server.use(corsMiddleware());
   // for handling response compression
-  _server.use(compressionMiddleware);
+  _server.use(compressionMiddleware());
   // for parsing JSON in post requests
-  _server.use(bodyParserMiddleware.json);
+  _server.use(bodyParserMiddleware.json());
   // for parsing URL query parameters
-  _server.use(bodyParserMiddleware.urlencoded);
+  _server.use(bodyParserMiddleware.urlencoded());
   // for prometheus metrics
-  console.info('registered', config.metricsEndpoint);
   _server.use(
     config.metricsEndpoint,
     basicAuthMiddleware(),
