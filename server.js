@@ -16,6 +16,8 @@ function server() {
   const healthCheckController = require('./controllers/health-check');
   const readinessCheckController = require('./controllers/readiness-check');
   const todoController = require('./controllers/todo');
+  const notFoundController = require('./controllers/not-found');
+  const errorController = require('./controllers/error');
   const corsMiddleware = require('./middleware/cors');
   const morganMiddleware = require('./middleware/morgan');
   const bodyParserMiddleware = require('./middleware/body-parser');
@@ -64,18 +66,8 @@ function server() {
   _server.delete('/user', todoController);
 
   // application error handlers
-  _server.use((req, res) => {
-    res.status(404).json('ok');
-  });
+  _server.use(notFoundController);
+  _server.use(errorController);
 
-  _server.use((err, req, res, next) => {
-    if (config.env === 'development') {
-      res.status(500).json(err);
-    } else {
-      res.status(500).json(err.message);
-    }
-  });
-
-  console.info('server initialised');
   return _server;
 };
