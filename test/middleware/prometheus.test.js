@@ -124,6 +124,7 @@ describe('middleware/prometheus', () => {
 
     after(() => {
       Prometheus.Gauge = gauge;
+      global.setTimeout.resetHistory();
       global.setTimeout = setTimeout;
     });
 
@@ -133,24 +134,19 @@ describe('middleware/prometheus', () => {
       global.setTimeout.resetHistory();
     });
 
-    it('creates a `node_cpu_usage` metric', (done) => {
+    it('creates a `node_cpu_usage` metric', () => {
       const TWO_SECONDS = 1000 * 2;
       prometheusMiddleware.registerCpuUsage();
       expect(gaugeSpy).to.be.calledOnce;
       expect(gaugeSpy.args[0][0].name).to.eql('node_cpu_usage');
       // the weird logic below is because of the `os-utils` package behaviour,
       // they use a setTimeout internally to trigger a callback, hence we do
-      // the same
+      // the same but call the callback immediately
       expect(global.setTimeout).to.be.calledOnce;
       global.setTimeout.args[0][0]();
-      setTimeout(() => {
-        expect(setSpy).to.be.calledOnce;
-        expect(global.setTimeout).to.be.calledTwice;
-        expect(global.setTimeout.args[1][1]).to.eql(TWO_SECONDS);
-        done();
-      }, 100);
-      // 100ms to be sure that the callback has returned a value lest this
-      // becomes a flaky tests relying on cpu speed
+      expect(setSpy).to.be.calledOnce;
+      expect(global.setTimeout).to.be.calledTwice;
+      expect(global.setTimeout.args[1][1]).to.eql(TWO_SECONDS);
     });
   });
 
