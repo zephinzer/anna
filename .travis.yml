@@ -15,6 +15,7 @@ notifications:
 
 stages:
   - test
+  - release
   - publish
 
 jobs:
@@ -43,7 +44,7 @@ jobs:
         - npm run mocha
       after_script:
         - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
-    - stage: publish
+    - stage: release
       script:
         - set -e
         - git checkout ${TRAVIS_BRANCH};
@@ -57,6 +58,11 @@ jobs:
             ./scripts/versioning/iterate -i -q;
           fi;
         - git push -q https://zephinzer:${GH_TOKEN}@github.com/zephinzer/anna.git --tags;
+    - stage: publish
+      script:
+        - set -e
+        - git checkout ${TRAVIS_BRANCH};
+        - git fetch;
         - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
         - CURRENT_VERSION=$(./scripts/versioning/get-latest -q)
         - TAG_LATEST="zephinzer/anna:latest"
