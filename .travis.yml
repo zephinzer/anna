@@ -20,6 +20,14 @@ stages:
 jobs:
   include:
     - stage: test
+      script:
+        - set -e
+        - npm run eslint
+    - stage: test
+      script:
+        - set -e
+        - npm run dockerlint
+    - stage: test
       before_script:
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
@@ -29,10 +37,6 @@ jobs:
         - npm run mocha
       after_script:
         - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
-    - stage: test
-      script:
-        - set -e
-        - npm run eslint
     - stage: publish
       script:
         - set -e

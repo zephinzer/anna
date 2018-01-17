@@ -16,6 +16,7 @@
     "mocha": "./scripts/test.sh",
     "mocha-watch": "mocha --reporter spec --watch \"./test/entrypoint.js\" \"./test/**/*.test.js\"",
     "eslint": "eslint .",
+    "dockerlint": "dockerfilelint ./provisioning/*.Dockerfile",
     "version-bump": "./scripts/versioning/iterate -q"
   },
   "author": "",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "dockerfilelint": "^1.4.0",
     "dotenv": "^4.0.0",
     "eslint": "^4.15.0",
     "eslint-config-google": "^0.9.1",
