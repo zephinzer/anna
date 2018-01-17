@@ -47,46 +47,54 @@ jobs:
     - stage: release
       script:
         - set -e
-        - git checkout ${TRAVIS_BRANCH};
-        - COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
         - |
-          if [[ $COMMIT_MESSAGE == *"[major version bump]"* ]]; then
-            ./scripts/versioning/iterate major -i -q;
-          elif [[ $COMMIT_MESSAGE == *"[minor version bump]"* ]]; then
-            ./scripts/versioning/iterate minor -i -q;
-          else
-            ./scripts/versioning/iterate -i -q;
+          if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+            git checkout ${TRAVIS_BRANCH};
+            COMMIT_MESSAGE=$(git log -n 1 --pretty=format:"%B");
+            if [[ $COMMIT_MESSAGE == *"[major version bump]"* ]]; then
+              ./scripts/versioning/iterate major -i -q;
+            elif [[ $COMMIT_MESSAGE == *"[minor version bump]"* ]]; then
+              ./scripts/versioning/iterate minor -i -q;
+            else
+              ./scripts/versioning/iterate -i -q;
+            fi;
+            git push -q https://zephinzer:${GH_TOKEN}@github.com/zephinzer/anna.git --tags;
           fi;
-        - git push -q https://zephinzer:${GH_TOKEN}@github.com/zephinzer/anna.git --tags;
     - stage: publish
       env:
         - ENV=development
       script:
         - set -e
-        - git checkout ${TRAVIS_BRANCH};
-        - git fetch;
-        - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
-        - CURRENT_VERSION=$(./scripts/versioning/get-latest -q)
-        - TAG_LATEST="zephinzer/anna:latest-dev"
-        - TAG_VERSION="zephinzer/anna:${CURRENT_VERSION}-dev"
-        - npm run build -- development
-        - docker push ${TAG_LATEST}
-        - docker tag ${TAG_LATEST} ${TAG_VERSION}
-        - docker push ${TAG_VERSION}
-        - docker logout
+        - |
+          if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+            git checkout ${TRAVIS_BRANCH};
+            git fetch;
+            docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
+            CURRENT_VERSION=$(./scripts/versioning/get-latest -q);
+            TAG_LATEST="zephinzer/anna:latest-dev";
+            TAG_VERSION="zephinzer/anna:${CURRENT_VERSION}-dev";
+            npm run build -- development;
+            docker push ${TAG_LATEST};
+            docker tag ${TAG_LATEST} ${TAG_VERSION};
+            docker push ${TAG_VERSION};
+            docker logout;
+          fi;
     - stage: publish
       env:
         - ENV=production
       script:
         - set -e
-        - git checkout ${TRAVIS_BRANCH};
-        - git fetch;
-        - docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}"
-        - CURRENT_VERSION=$(./scripts/versioning/get-latest -q)
-        - TAG_LATEST="zephinzer/anna:latest"
-        - TAG_VERSION="zephinzer/anna:${CURRENT_VERSION}"
-        - npm run build -- production
-        - docker push ${TAG_LATEST}
-        - docker tag ${TAG_LATEST} ${TAG_VERSION}
-        - docker push ${TAG_VERSION}
-        - docker logout
+        - |
+          if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+            git checkout ${TRAVIS_BRANCH};
+            git fetch;
+            docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
+            CURRENT_VERSION=$(./scripts/versioning/get-latest -q);
+            TAG_LATEST="zephinzer/anna:latest";
+            TAG_VERSION="zephinzer/anna:${CURRENT_VERSION}";
+            npm run build -- production;
+            docker push ${TAG_LATEST};
+            docker tag ${TAG_LATEST} ${TAG_VERSION};
+            docker push ${TAG_VERSION};
+            docker logout;
+          fi;

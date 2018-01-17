@@ -25,6 +25,7 @@ function server() {
   const compressionMiddleware = require('./middleware/compression');
   const prometheusMiddleware = require('./middleware/prometheus');
   const basicAuthMiddleware = require('./middleware/basic-auth');
+
   const _server = express();
 
   // for logging all requests
