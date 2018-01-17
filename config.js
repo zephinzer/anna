@@ -20,6 +20,7 @@ const {
   DB_CONNECTION_URL,
   DB_MIGRATIONS_TABLE_NAME,
   HEALTH_CHECK_ENDPOINT,
+  METRICS_ENDPOINT,
   NODE_ENV,
   PORT,
   READINESS_CHECK_ENDPOINT,
@@ -81,6 +82,9 @@ console.info('DB_MIGRATIONS_TABLE_NAME:', DB_MIGRATIONS_TABLE_NAME, `(set to: ${
 const healthCheckEndpoint = HEALTH_CHECK_ENDPOINT || '/healthz';
 console.info('HEALTH_CHECK_ENDPOINT:', HEALTH_CHECK_ENDPOINT, `(set to: ${healthCheckEndpoint})`); // eslint-disable-line max-len
 
+const metricsEndpoint = METRICS_ENDPOINT || '/metrics';
+console.info('METRICS_ENDPOINT:', METRICS_ENDPOINT, `(set to: ${metricsEndpoint})`); // eslint-disable-line max-len
+
 const env =
   [
     'development',
@@ -116,6 +120,7 @@ module.exports = {
   dbUser,
   env,
   healthCheckEndpoint,
+  metricsEndpoint,
   port,
   readinessCheckEndpoint,
   realm,

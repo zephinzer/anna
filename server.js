@@ -2,7 +2,7 @@
  * Server application
  */
 
-module.exports = server();
+module.exports = server;
 
 /**
  * exports the application server
@@ -41,7 +41,12 @@ function server() {
   // for parsing URL query parameters
   _server.use(bodyParserMiddleware.urlencoded);
   // for prometheus metrics
-  _server.use('/metrics', basicAuthMiddleware(), prometheusMiddleware());
+  console.info('registered', config.metricsEndpoint);
+  _server.use(
+    config.metricsEndpoint,
+    basicAuthMiddleware(),
+    prometheusMiddleware()
+  );
 
   // application logic, see controllers for details
   _server.get('/session', todoController);
@@ -72,5 +77,6 @@ function server() {
     }
   });
 
+  console.info('server initialised');
   return _server;
 };

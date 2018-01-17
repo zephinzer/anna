@@ -65,7 +65,7 @@ An audit represents changes to any of the afore-mentioned entities and provides 
 ## Support Endpoints
 
 ### GET `/metrics`
-> Basic Auth protected
+> Basic Auth protected. This endpoint can be [configured using an environment variable](#metrics_endpoint)
 Exposes the Prometheus metrics.
 
 ### GET `/healthz`
@@ -308,6 +308,11 @@ Defines the endpoint for health checks to be done on.
 
 > Defaults to `/healthz`.
 
+### `METRICS_ENDPOINT`
+Defines the endpoint for metrics.
+
+> Defaults to `/metrics`.
+
 ### `NODE_ENV`
 Defines the environment we are running in.
 
@@ -407,6 +412,8 @@ Building has no real use, we only use it in the Travis pipeline to push to Docke
 
 #### Raise Issue
 [Start an issue](https://github.com/zephinzer/anna/issues) so that everyone knows what you're working on. It'll suck if someone was doing the same thing you did and only one person's code will be merged in.
+
+You can also assign the issue to yourself if you are taking up the work.
 
 #### Fork & Build
 Fork this repository and make your changes in your `master` branch. After making your changes:

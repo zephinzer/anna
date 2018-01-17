@@ -1,8 +1,9 @@
 const supertest = require('supertest');
 const config = require('../config');
+const server = require('../server');
 
-describe('server', () => {
-  let server = null;
+describe.only('server', () => {
+  let app = null;
   let basicAuthUsers = null;
 
   before(() => {
@@ -17,7 +18,7 @@ describe('server', () => {
         password: 'server_test_pass2',
       },
     ];
-    server = require('../server');
+    app = server();
   });
 
   after(() => {
@@ -26,25 +27,58 @@ describe('server', () => {
 
   describe('GET /metrics', () => {
     it('returns 401 unauthorized if no credentials are provided', () =>
-      supertest(server)
+      supertest(app)
         .get('/metrics')
         .expect('Content-Type', /text\/plain/)
         .expect(401)
     );
 
     it('works as expected otherwise', () =>
-      supertest(server)
+      supertest(app)
         .get('/metrics')
-        .set('Authorization',
-          `${config.basicAuthUsers[0].username}:${config.basicAuthUsers[0].password}` // eslint-disable-line max-len
+        .auth(
+          config.basicAuthUsers[0].username,
+          config.basicAuthUsers[0].password
         )
         .expect('Content-Type', /text\/plain/)
-        .expect(401)
+        .expect(200)
     );
+
+    context('METRICS_ENDPOINT set', () => {
+      let metricsModifiedApp = null;
+      let metricsEndpoint = null;
+
+      before(() => {
+        metricsEndpoint = config.metricsEndpoint;
+        config.metricsEndpoint = '/__changed_metrics_endpoint';
+        metricsModifiedApp = server();
+      });
+
+      after(() => {
+        config.metricsEndpoint = metricsEndpoint;
+      });
+
+      it('works as expected', () =>
+        supertest(metricsModifiedApp)
+          .get('/__changed_metrics_endpoint')
+          .auth(
+            config.basicAuthUsers[0].username,
+            config.basicAuthUsers[0].password
+          )
+          .expect('Content-Type', /text\/plain/)
+          .expect(200)
+      );
+
+      it('shouldn\'t have registered the original endpoint', () =>
+        supertest(metricsModifiedApp)
+          .get('/metrics')
+          .expect(404)
+      );
+    });
   });
 
   it('has GET /healthz registered', () =>
-    supertest(server)
+    supertest(app)
       .get('/healthz')
       .expect('Content-Type', /json/)
       .expect(200)
@@ -71,7 +105,7 @@ describe('server', () => {
       });
 
       it('returns 500 internal server error if database has errors', () =>
-        supertest(server)
+        supertest(app)
           .get('/readyz')
           .expect('Content-Type', /json/)
           .expect(500)
@@ -96,7 +130,7 @@ describe('server', () => {
       });
 
       it('works as expected', () =>
-        supertest(server)
+        supertest(app)
           .get('/readyz')
           .expect('Content-Type', /json/)
           .expect(200)
@@ -110,7 +144,7 @@ describe('server', () => {
 
 
   it('has GET /session registered', () =>
-    supertest(server)
+    supertest(app)
       .get('/session')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -121,7 +155,7 @@ describe('server', () => {
   );
 
   it('has POST /session registered', () =>
-    supertest(server)
+    supertest(app)
       .post('/session')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -132,7 +166,7 @@ describe('server', () => {
   );
 
   it('has DELETE /session registered', () =>
-    supertest(server)
+    supertest(app)
       .delete('/session')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -143,7 +177,7 @@ describe('server', () => {
   );
 
   it('has GET /profiles registered', () =>
-    supertest(server)
+    supertest(app)
       .get('/profiles')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -154,7 +188,7 @@ describe('server', () => {
   );
 
   it('has GET /profile/:id registered', () =>
-    supertest(server)
+    supertest(app)
       .get('/profile/1234')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -165,7 +199,7 @@ describe('server', () => {
   );
 
   it('has PATCH /profile/:id registered', () =>
-    supertest(server)
+    supertest(app)
       .patch('/profile/1234')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -176,7 +210,7 @@ describe('server', () => {
   );
 
   it('has DELETE /profile/:id registered', () =>
-    supertest(server)
+    supertest(app)
       .delete('/profile/1234')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -187,7 +221,7 @@ describe('server', () => {
   );
 
   it('has POST /profile registered', () =>
-    supertest(server)
+    supertest(app)
       .post('/profile')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -198,7 +232,7 @@ describe('server', () => {
   );
 
   it('has GET /user/:id registered', () =>
-    supertest(server)
+    supertest(app)
       .get('/user/1234')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -209,7 +243,7 @@ describe('server', () => {
   );
 
   it('has GET /user/:id/profiles registered', () =>
-    supertest(server)
+    supertest(app)
       .get('/user/1234/profiles')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -220,7 +254,7 @@ describe('server', () => {
   );
 
   it('has GET /user registered', () =>
-    supertest(server)
+    supertest(app)
       .get('/user')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -231,7 +265,7 @@ describe('server', () => {
   );
 
   it('has POST /user registered', () =>
-    supertest(server)
+    supertest(app)
       .post('/user')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -242,7 +276,7 @@ describe('server', () => {
   );
 
   it('has PATCH /user registered', () =>
-    supertest(server)
+    supertest(app)
       .patch('/user')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -253,7 +287,7 @@ describe('server', () => {
   );
 
   it('has DELETE /user registered', () =>
-    supertest(server)
+    supertest(app)
       .delete('/user')
       .expect('Content-Type', /json/)
       .expect(418)
@@ -264,7 +298,7 @@ describe('server', () => {
   );
 
   it('has a universal 404 response', () =>
-    supertest(server)
+    supertest(app)
       .get('/routeless-path')
       .expect('Content-Type', /json/)
       .expect(404)

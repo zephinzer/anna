@@ -21,7 +21,7 @@ function prometheusMiddleware() {
     includeMethod: true,
     includeStatusCode: true,
     includePath: true,
-  });
+  }).metricsMiddleware;
 };
 
 prometheusMiddleware.registerCpuUsage = () => {
