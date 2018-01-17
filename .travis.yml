@@ -20,14 +20,20 @@ stages:
 jobs:
   include:
     - stage: test
+      env:
+        - LABEL: eslint
       script:
         - set -e
         - npm run eslint
     - stage: test
+      env:
+        - LABEL: dockerlint
       script:
         - set -e
         - npm run dockerlint
     - stage: test
+      env:
+        - LABEL: mocha
       before_script:
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
