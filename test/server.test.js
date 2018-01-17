@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const config = require('../config');
 const server = require('../server');
 
-describe.only('server', () => {
+describe('server', () => {
   let app = null;
   let basicAuthUsers = null;
 
