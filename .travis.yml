@@ -22,19 +22,22 @@ jobs:
   include:
     - stage: test
       env:
-        - LABEL: eslint
+        - TYPE: lint
+        - ON: javascript
       script:
         - set -e
         - npm run eslint
     - stage: test
       env:
-        - LABEL: dockerlint
+        - TYPE: lint
+        - ON: dockerfiles
       script:
         - set -e
         - npm run dockerlint
     - stage: test
       env:
-        - LABEL: mocha
+        - TYPE: functional
+        - ON: javascript
       before_script:
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter
@@ -45,6 +48,8 @@ jobs:
       after_script:
         - ./cc-test-reporter after-build -r "${CC_TOKEN}" --coverage-input-type lcov --exit-code ${TRAVIS_TEST_RESULT}
     - stage: release
+      env:
+        - TO: github
       script:
         - set -e
         - |
@@ -62,7 +67,8 @@ jobs:
           fi;
     - stage: publish
       env:
-        - ENV=development
+        - TO: dockerhub
+        - ENV: development
       script:
         - set -e
         - |
@@ -81,7 +87,8 @@ jobs:
           fi;
     - stage: publish
       env:
-        - ENV=production
+        - TO: dockerhub
+        - ENV: production
       script:
         - set -e
         - |
